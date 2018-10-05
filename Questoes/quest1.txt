@@ -1,4 +1,14 @@
-1- Sistemas embarcados são sistemas nos quais o computador é totalmente dedicado ao dispositivo.
+1- Sistemas embarcados são sistemas feitos para executar apenas uma função.
 
-2- 
+2- São sistmas nos quais o computador é completamente dedicado ao dispositivo.
+
+3-
+a) Sensor de velocidade
+b) Micro-ondas
+c) Acionamentos elétricos
+
+4- O System on Chip cont~em um ou mais núcleos de processadores, já na FPGA é possível configurar o Hardware para desempenhar qualquer função.
+
+5- Por conta do sistema operacional poder ser Linux e ter capacidade para câmera.
+
 
