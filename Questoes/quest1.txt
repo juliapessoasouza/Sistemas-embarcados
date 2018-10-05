@@ -1,1 +1,4 @@
-Questões Aula 1
+1- Sistemas embarcados são sistemas nos quais o computador é totalmente dedicado ao dispositivo.
+
+2- 
+
