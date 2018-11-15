@@ -1,10 +1,10 @@
-1-
+1- Por conta do criador do sistema, Linux Torvalds.
 
 2- Programas executados em plano de fundo como processos, sem necessidade de interação com o usuário.
 
 3- Shell é a linha de comando.
 
-4-
+4- Como super-usuário é possivel fazer alterações irreversíveis no sistema e danificar a máquina.
 
 5- TAB.
 
@@ -16,19 +16,19 @@ c) pwd
 d) cd
 e) mkdir
 f) rm
-g)
+g) rmdir
 h) cp
-i)
+i) cp -r
 j) mv
-k)
-l)
+k) mv
+l) mv
 m) cat
 n) file
 o) clear
-p)
-q)
-r)
-s)
-t)
+p) grep
+q) sort
+r) sed -e
+s) diff
+t) echo
 
 
