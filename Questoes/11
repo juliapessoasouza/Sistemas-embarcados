@@ -1,0 +1,14 @@
+1- Raspbian: Um sistema operacional livre baseado em Debian, otimizado para o hardware do Raspberry Pi, vem com todos os programas básicos e utilidades que você espera para um sistema de propósito geral.
+
+Ubuntu MATE: É um sistema operacional simples e estável que traz recursos configuráveis de uma forma mais intuitiva.
+
+Snappy Ubuntu: Uma versão mais leve do Ubunto para nuvens e dispositivos, usa uma imagem de servidor mínima com as mesmas bibliotecas do sistema.
+
+Pidora: É um remix do sistema operacional Fedora para raspberry Pi. Permite ótima velocidade e carrega aplicativos e componentes do pacote 20 do Fedora.
+
+Linutop: É um sistema que pode ser colocado de forma rápida no Raspberry Pi. É baseado no Raspbian com uma clássico e leve ambiente gráfico.
+
+
+2- Utiliza-se um cartão SD para colocar a imagem do sistema através de outro pc, linux, mac ou windows e após passar a imagem, coloca-se o cartão no Raspberry Pi.
+
+3- 
