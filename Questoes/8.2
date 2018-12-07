@@ -1,0 +1,455 @@
+1-
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h>
+
+	int parametro[20];
+    int i;
+
+void *print_thread(void *parameters)
+{
+	int *p = (int *)parameters;
+
+ 	for(int n = 0; n < 10 ; n++)
+ 	{    
+        printf("Estou na thread_1: %d\n", i);
+		printf("Recebi %d\n", parametro[i - 1]);
+		sleep(1);
+    }
+	return NULL;
+}
+ int main()
+ {
+ 	
+     pthread_t thread_1;
+
+ 	pthread_create(&thread_1,NULL, &print_thread, &thread_1);
+    
+ 	for(i = 1; i < 11 ; i++)
+ 	{
+        printf("Enviando %d\n", i);
+ 		parametro[i - 1] = i;
+ 		sleep(1);
+ 	}
+ 	
+ 	pthread_join(thread_1,NULL);
+ 	return 0;
+}
+
+
+Enviando 1
+Estou na thread_1: 1
+Recebi 1
+Enviando 2
+Estou na thread_1: 2
+Recebi 2
+Enviando 3
+Estou na thread_1: 3
+Recebi 3
+Enviando 4
+Estou na thread_1: 4
+Recebi 4
+Enviando 5
+Estou na thread_1: 5
+Recebi 5
+Enviando 6
+Estou na thread_1: 6
+Recebi 6
+Enviando 7
+Estou na thread_1: 7
+Recebi 7
+Enviando 8
+Estou na thread_1: 8
+Recebi 8
+Enviando 9
+Estou na thread_1: 9
+Recebi 9
+Enviando 10
+Estou na thread_1: 10
+Recebi 10
+
+2-
+a)
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <string.h>
+
+	long int v[50000];
+	int i;
+	int parametro[30];
+ 
+ int main()
+ {
+     int valor_max = 0, valor = 542734400;
+     for(i = 0; i < 50000 ; i++)
+ 	{
+        v[i] = random();
+    }
+       for(i = 0; i < 50000 ; i++)
+ 	{
+        if(v[i] > valor_max)
+        {
+            valor_max = v[i];
+            
+        }
+ 	}  
+     
+    printf("Valor valor_max: %d\n", valor_max); 	
+
+ 	return 0;
+}
+
+
+Valor valor_max: 2147469841
+
+b)
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <string.h>
+
+	long int v[50000];
+    int i;
+    int  valor_max = 0, valor = 542734400;
+    
+
+void *print_thread_1(void *parameters)
+{
+
+    for(i = 0; i < 12500 ; i++)
+ 	{
+        if(v[i] > valor_max)
+        {
+            valor_max = v[i];
+        }
+ 	}  
+}
+
+void *print_thread_2(void *parameters)
+{
+    for(int n = 12500; n < 25000 ; n++)
+ 	{
+        if(v[n] > valor_max)
+        {
+            valor_max = v[n];
+        }
+ 	}  
+}
+
+void *print_thread_3(void *parameters)
+{
+    for(int m = 25000; m < 37500 ; m++)
+ 	{
+        if(v[m] > valor_max)
+        {
+             valor_max = v[m];      
+        }
+ 	}  
+     
+}
+
+void *print_thread_4(void *parameters)
+{
+    for(int k = 37500; k < 50000 ; k++)
+ 	{
+        if(v[k] > valor_max)
+        {
+             valor_max = v[k];
+        }
+ 	}  
+     
+}
+
+ int main()
+ {
+ 	
+    pthread_t thread_1, thread_2, thread_3, thread_4;
+    
+     for(i = 0; i < 50000 ; i++)
+ 	{
+        v[i] = random();
+        
+    }
+     
+    pthread_create(&thread_1,NULL, &print_thread_1, &thread_1);
+ 	pthread_create(&thread_2,NULL, &print_thread_2, &thread_2);
+ 	pthread_create(&thread_3,NULL, &print_thread_3, &thread_3);
+ 	pthread_create(&thread_4,NULL, &print_thread_4, &thread_4);
+
+    pthread_join(thread_1,NULL);
+    pthread_join(thread_2,NULL);
+    pthread_join(thread_3,NULL);
+    pthread_join(thread_4,NULL);
+     	 	
+    printf("Valor max: %d\n",  valor_max); 	    
+    
+    return 0;
+}
+
+
+Iguais: 2147469841
+
+3-
+a)
+#include <string.h>
+
+	long int v[50000], soma;
+    int i;
+    int parametro[30];
+
+ int main()
+ {
+
+     for(i = 0; i < 50000 ; i++)
+ 	{
+        v[i] = random();
+        
+    }
+     
+       for(i = 0; i < 50000 ; i++)
+ 	{
+            soma = v[i] + soma;
+            
+    }
+
+    printf("Soma: %ld\n", soma); 	
+    printf("Valor media: %ld\n", soma/50000); 	
+
+ 	return 0;
+}
+
+
+
+Soma: 53515543507997
+Valor media: 1070310870
+
+b)
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <string.h>
+
+	long int v[50000];
+    int i;
+    long int  soma, soma_1, soma_2, soma_3;
+    
+
+void *print_thread_1(void *parameters)
+{
+
+    for(i = 0; i < 12500 ; i++)
+ 	{
+            soma = soma + v[i];
+ 	}  
+}
+
+void *print_thread_2(void *parameters)
+{
+    for(int n = 12500; n < 25000 ; n++)
+ 	{           
+        soma_1 = soma_1 + v[n];
+ 	}  
+}
+
+void *print_thread_3(void *parameters)
+{
+    for(int m = 25000; m < 37500 ; m++)
+ 	{
+        soma_2 = soma_2 + v[m];
+ 	}  
+     
+}
+
+void *print_thread_4(void *parameters)
+{
+    for(int k = 37500; k < 50000 ; k++)
+ 	{
+        soma_3 = soma_3 + v[k];
+ 	} 
+     
+}
+
+ int main()
+ {
+ 	
+    pthread_t thread_1, thread_2, thread_3, thread_4;
+    
+     for(i = 0; i < 50000 ; i++)
+ 	{
+        v[i] = random();
+        
+    }
+     
+    pthread_create(&thread_1,NULL, &print_thread_1, &thread_1);
+ 	pthread_create(&thread_2,NULL, &print_thread_2, &thread_2);
+ 	pthread_create(&thread_3,NULL, &print_thread_3, &thread_3);
+ 	pthread_create(&thread_4,NULL, &print_thread_4, &thread_4);
+
+    pthread_join(thread_1,NULL);
+    pthread_join(thread_2,NULL);
+    pthread_join(thread_3,NULL);
+    pthread_join(thread_4,NULL);
+
+    soma = soma + soma_1 + soma_2 + soma_3;
+    
+    printf("Soma: %ld\n",  soma); 	    
+    printf("Media: %ld\n",  soma/50000); 	    
+    
+    return 0;
+}
+
+
+Soma: 53515543507997
+Media: 1070310870
+
+4-
+a)
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <string.h>
+
+	long int v[50000], soma = 0, variancia = 0, media = 0, variancia_numerador = 0, aux_variancia;
+    int i;
+    int parametro[30];
+    
+
+ int main()
+ {
+
+     for(i = 0; i < 50000 ; i++)
+ 	{
+        v[i] = random();
+        
+    }
+     
+       for(i = 0; i < 50000 ; i++)
+ 	{
+            soma = v[i] + soma;
+            
+    }
+
+    media = (soma/50000);
+    
+         for(i = 0; i < 50000 ; i++)
+ 	{
+            aux_variancia = ( v[i] - media);
+            variancia = variancia_numerador + (aux_variancia)*(aux_variancia)/50000;
+    }
+
+    
+    printf("Soma: %ld\n", soma); 	
+    printf("Valor media: %ld\n", soma/50000); 
+//     printf("aux_variancia: %ld\n", aux_variancia); 
+//     printf("variancia: %ld\n", variancia_numerador); 	
+    printf("variancia: %ld\n", variancia); 	
+
+ 	return 0;
+}
+
+
+Soma: 53515543507997
+Valor media: 1070310870
+aux_variancia: 324751885
+variancia: 2109275736221
+
+b)
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <string.h>
+
+	long int v[50000], soma = 0, variancia = 0, media = 0, variancia_numerador = 0, aux_variancia;
+
+    int i;
+    long int  soma, soma_1, soma_2, soma_3;
+    
+
+void *print_thread_1(void *parameters)
+{
+
+    for(i = 0; i < 12500 ; i++)
+ 	{
+            soma = soma + v[i];
+ 	}  
+}
+
+void *print_thread_2(void *parameters)
+{
+    for(int n = 12500; n < 25000 ; n++)
+ 	{           
+        soma_1 = soma_1 + v[n];
+ 	}  
+}
+
+void *print_thread_3(void *parameters)
+{
+    for(int m = 25000; m < 37500 ; m++)
+ 	{
+        soma_2 = soma_2 + v[m];
+ 	}  
+     
+}
+
+void *print_thread_4(void *parameters)
+{
+    for(int k = 37500; k < 50000 ; k++)
+ 	{
+        soma_3 = soma_3 + v[k];
+ 	} 
+     
+}
+
+ int main()
+ {
+ 	
+    pthread_t thread_1, thread_2, thread_3, thread_4;
+    
+     for(i = 0; i < 50000 ; i++)
+ 	{
+        v[i] = random();
+        
+    }
+     
+    pthread_create(&thread_1,NULL, &print_thread_1, &thread_1);
+ 	pthread_create(&thread_2,NULL, &print_thread_2, &thread_2);
+ 	pthread_create(&thread_3,NULL, &print_thread_3, &thread_3);
+ 	pthread_create(&thread_4,NULL, &print_thread_4, &thread_4);
+
+    pthread_join(thread_1,NULL);
+    pthread_join(thread_2,NULL);
+    pthread_join(thread_3,NULL);
+    pthread_join(thread_4,NULL);
+
+    soma = soma + soma_1 + soma_2 + soma_3;
+    
+    
+    media = (soma/50000);
+    
+         for(i = 0; i < 50000 ; i++)
+ 	{
+            aux_variancia = ( v[i] - media);
+            variancia = variancia_numerador + (aux_variancia)*(aux_variancia)/50000;
+    }
+
+    
+    printf("Soma: %ld\n", soma); 	
+    printf("Valor media: %ld\n", media); 
+//     printf("aux_variancia: %ld\n", aux_variancia); 
+//     printf("variancia: %ld\n", variancia_numerador); 	
+    printf("variancia: %ld\n", variancia); 
+    
+    return 0;
+}
+
+
+Soma: 53515543507997
+Valor media: 1070310870
+variancia: 2109275736221
