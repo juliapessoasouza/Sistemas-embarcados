@@ -1,0 +1,61 @@
+1-
+a)
+int pid;
+int fd[2];
+pipe(fd);
+pid = fork();
+
+Apenas 1 pipe com uma posição para leitura e outra para escrita.
+Sendo que a criação do mesmo ocorreu antes do fork e tanto o Pai
+quanto o Filho compartinham.
+
+b)
+int pid;
+int fd[2];
+pid = fork();
+pipe(fd);
+
+
+Tem-se 2 pipes sendo que cada um com uma posição para leitura e outra para escrita.
+Sendo que a criação do mesmo ocorreu depois do fork e tanto o Pai
+quanto o Filho criaram seu pipe em seu proprio processo, e um não enxerga o do outro.
+
+2-
+• SIGKILL (9) Destruição: “arma absoluta” para matar os 
+processos. Não pode ser ignorada, tampouco interceptada
+existe ainda o SIGTERM para uma morte mais “suave” para 
+processos .
+• SIGBUS(10) Emitido em caso de erro sobre o barramento. 
+• SIGSEGV (11) Emitido em caso de violação da segmentação: 
+tentativa de acesso a um dado fora do domínio de 
+endereçamento do processo.
+• SIGSYS( 12) Argumento incorreto de uma chamada de 
+sistema. 
+• SIGPIPE (13) Escrita sobre um pipe não aberto em leitura.
+
+3-
+#include <signal.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+void tratamento_alarme(int sig)
+{
+	system("date");
+	alarm(1);
+}
+
+int main()
+{
+	signal(SIGALRM, tratamento_alarme);
+	alarm(1);
+	printf("Aperte CTRL+C para acabar:\n");
+	while(1);
+	return 0;
+}
+
+A precisão da contagem não dá para saber com exatidão, pois o processador roda diversos processos
+ao mesmo tempo e isto vai depender do tanto de tarefas que este estiver executando, quantos cores,
+qual a velocidade de processamento, etc. Mas em um teste em sala foi possivél concluir que no
+dispositivo testado a precisão é da ordem de algumas dezenas de milissegundos. A imprecisão é 
+variável e não tem como torna este método confiável para aplicações em tempo real.
