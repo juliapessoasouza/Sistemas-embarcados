@@ -1,0 +1,394 @@
+1-
+a)
+forma sequencial;
+
+Resposta: arquivo q1.c
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <pthread.h>
+
+long int A[60][60];
+long int B[60][60];
+long int AB[60][60];
+
+struct posicao_i_j{
+	int i;
+	int j;
+};
+
+int main(int argc, char** argv){
+	
+	int i,j;
+
+	for(i = 0; i <60; i++){
+		for(j = 0; j <60; j++){
+			A[i][j] = random();
+			B[i][j] = random();
+			AB[i][j] = A[i][j]+B[i][j];
+		}
+	}
+
+	//Apresentar a Matriz AB
+
+	for(i = 0; i <60; i++){
+		for(j = 0; j <60; j++){
+			printf("%ld ",AB[i][j]);
+		}
+		printf("\n");
+	}
+
+	return 0;
+}
+
+
+b)
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <pthread.h>
+
+long int A[60][60];
+long int B[60][60];
+long int AB[60][60];
+
+struct posicao_i_j{
+	int i;
+	int j;
+};
+
+void* thread( void* posicao){
+
+	struct posicao_i_j* pont = (struct posicao_i_j*) posicao;
+	int i = pont->i;
+	int j = pont->j;
+	A[i][j] = random();
+	B[i][j] = random();	
+	AB[i][j] = A[i][j]+B[i][j];
+	return NULL;
+}
+
+
+int main(int argc, char** argv){
+	
+	int i = 0,j = 0;
+
+	pthread_t thread_id[60][60];
+
+	struct posicao_i_j posicao_main;
+	for(i = 0; i <60; i++){
+		for(j = 0; j <60; j++){
+			posicao_main.i = i;
+			posicao_main.j = j;
+			pthread_create(&thread_id[i][j],NULL,&thread,&posicao_main);
+			//pthread_create(&thread_id1[i][j],NULL,&thread1,&posicao_main, NULL);
+			//pthread_create(&thread_id1, NULL, &thread1, NULL);
+		}
+	}
+
+	pthread_join(thread_id[59][59],NULL);
+	//sleep(1);
+	
+	//Apresentar a Matriz AB
+
+	for(i = 0; i <60; i++){
+		for(j = 0; j <60; j++){
+			printf("%ld ",AB[i][j]);
+		}
+		printf("\n");
+	}
+
+	return 0;
+}
+
+
+O primeiro executou em 3 ms já o da letra b executou em 2 ms.
+
+2-
+include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h>
+
+    long int A[60][60], aux=0;
+    long int B[60][60];
+    long int produto_serie[60][60];
+    long int produto_paralelo[60][60];
+    
+    int i, coluna;
+
+//////////////////////////////////////////////////////////////////    
+//                 THREADS_FUNCTIONS
+//////////////////////////////////////////////////////////////////    
+void *function_thread_1(void *parameters)
+{
+    for(int m = 0; m < 60; m++)
+    {
+ 	for(int n = 0; n < 60 ; n++)
+ 	{    
+        for(int p = 0; p < 60 ; p++)
+ 	{
+            aux = aux + (A[n][p])*(B[p][n]);
+            
+ 	}
+
+        produto_paralelo[m][n] = aux;
+        aux = 0;
+        coluna++;
+    }
+    }
+	return NULL;
+}
+
+
+//////////////////////////////////////////////////////////////////
+//                     IMPRIMIR_VALORES
+//////////////////////////////////////////////////////////////////
+    
+void printf_matrix(long int matrix[][60])
+{
+    for(int m = 0; m < 60; m++)
+    {
+            for(int k = 0; k < 60; k++)
+            {
+                 printf("[%d][%d]: %ld  |",m+1,k+1,matrix[m][k]);
+            }    
+        printf("\n");
+        printf("\n");
+    }
+    
+}
+
+//////////////////////////////////////////////////////////////////
+//                     FUNCTION_COMPARAR
+//////////////////////////////////////////////////////////////////
+    
+void comparar(long int matrix_serie[][60], long int matrix_paralela[][60])
+{
+    int diferente = 0;
+    for(int m = 0; m < 60; m++)
+    {
+            for(int k = 0; k < 60; k++)
+            {
+                 if (matrix_serie[m][k] != matrix_paralela[m][k])
+                 {
+                     diferente = 1;
+            printf("matrix_serie [%d][%d]: %ld", m, k, matrix_serie[m][k]);
+            printf("matrix_paralela [%d][%d]: %ld", m,k,matrix_paralela[m][k]);
+                 }
+            }    
+    }
+    
+    if(diferente == 1)
+    {
+        printf("As matrizes são diferentes.");
+    } else
+    {
+        printf("As matrizes são iguais.");
+    }
+        
+    
+}
+
+
+
+//////////////////////////////////////////////////////////////////
+//                     MAIN
+//////////////////////////////////////////////////////////////////
+
+
+ int main()
+ {
+/////////////////////////////////////////////////////////////////////////////
+//             SOMA SERIE
+////////////////////////////////////////////////////////////////////////////    
+
+ 	for(i = 0; i < 60 ; i++)
+ 	{
+         	for(int n = 0; n < 60 ; n++)
+ 	{     
+            A[i][n] = 1;//rand() % 100;
+            B[i][n] = 2;//rand() % 100;
+ 	}
+    }
+    
+    for(int m = 0; m < 60; m++)
+    {
+ 	for(int n = 0; n < 60 ; n++)
+ 	{    
+        for(int p = 0; p < 60 ; p++)
+ 	{
+            aux = aux + (A[n][p])*(B[p][n]);
+            
+ 	}
+
+        produto_serie[m][n] = aux;
+        aux = 0;
+        coluna++;
+    }
+    }
+    
+    
+    
+//      printf_matrix(produto_serie);
+
+/////////////////////////////////////////////////////////////////////////////
+//             SOMA PARALELA
+////////////////////////////////////////////////////////////////////////////    
+//     TRABALHAR COM TRES THREDS CADA UMA SOMA UMA PARTE DA matrix
+////////////////////////////////////////////////////////////////////////////    
+    
+    
+      pthread_t thread_1;
+ 
+  	pthread_create(&thread_1,NULL, &function_thread_1, NULL);
+ 
+    
+  	pthread_join(thread_1,NULL);
+ 
+
+//     printf_matrix(produto_paralelo);
+
+         comparar(produto_serie, produto_paralelo);
+    
+    return 0;
+
+     
+}
+
+
+3-
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h>
+
+    long int A[60][60], aux=0;
+    long int escalar = 3;
+    long int produto_serie[60][60];
+    long int produto_paralelo[60][60];
+    
+    int i, coluna;
+
+//////////////////////////////////////////////////////////////////    
+//                 THREADS_FUNCTIONS
+//////////////////////////////////////////////////////////////////    
+void *function_thread_1(void *parameters)
+{
+    for(int m = 0; m < 60; m++)
+    {
+ 	for(int n = 0; n < 60 ; n++)
+ 	{    
+        produto_paralelo[m][n] = (A[m][n])*(escalar);
+            
+ 	}        
+    }
+	return NULL;
+}
+
+
+//////////////////////////////////////////////////////////////////
+//                     IMPRIMIR_VALORES
+//////////////////////////////////////////////////////////////////
+    
+void printf_matrix(long int matrix[][60])
+{
+    for(int m = 0; m < 60; m++)
+    {
+            for(int k = 0; k < 60; k++)
+            {
+                 printf("[%d][%d]: %ld  |",m+1,k+1,matrix[m][k]);
+            }    
+        printf("\n");
+        printf("\n");
+    }
+    
+}
+
+//////////////////////////////////////////////////////////////////
+//                     FUNCTION_COMPARAR
+//////////////////////////////////////////////////////////////////
+    
+void comparar(long int matrix_serie[][60], long int matrix_paralela[][60])
+{
+    int diferente = 0;
+    for(int m = 0; m < 60; m++)
+    {
+            for(int k = 0; k < 60; k++)
+            {
+                 if (matrix_serie[m][k] != matrix_paralela[m][k])
+                 {
+                     diferente = 1;
+            printf("matrix_serie [%d][%d]: %ld", m, k, matrix_serie[m][k]);
+            printf("matrix_paralela [%d][%d]: %ld", m,k,matrix_paralela[m][k]);
+                 }
+            }    
+    }
+    
+    if(diferente == 1)
+    {
+        printf("As matrizes são diferentes.");
+    } else
+    {
+        printf("As matrizes são iguais.");
+    }
+        
+    
+}
+
+
+
+//////////////////////////////////////////////////////////////////
+//                     MAIN
+//////////////////////////////////////////////////////////////////
+
+
+ int main()
+ {
+/////////////////////////////////////////////////////////////////////////////
+//             SOMA SERIE
+////////////////////////////////////////////////////////////////////////////    
+
+ 	for(i = 0; i < 60 ; i++)
+ 	{
+         	for(int n = 0; n < 60 ; n++)
+ 	{     
+            A[i][n] = rand() % 100;
+ 	}
+    }
+    
+    for(int m = 0; m < 60; m++)
+    {
+ 	for(int n = 0; n < 60 ; n++)
+ 	{    
+        produto_serie[m][n] = (A[m][n])*(escalar);
+            
+ 	}        
+    }
+    
+     printf_matrix(produto_serie);
+
+/////////////////////////////////////////////////////////////////////////////
+//             SOMA PARALELA
+////////////////////////////////////////////////////////////////////////////    
+//     TRABALHAR COM TRES THREDS CADA UMA SOMA UMA PARTE DA matrix
+////////////////////////////////////////////////////////////////////////////    
+    
+    
+      pthread_t thread_1;
+ 
+  	pthread_create(&thread_1,NULL, &function_thread_1, NULL);
+ 
+    
+  	pthread_join(thread_1,NULL);
+ 
+
+//     printf_matrix(produto_paralelo);
+
+         comparar(produto_serie, produto_paralelo);
+    
+    return 0;
+
+     
+}
