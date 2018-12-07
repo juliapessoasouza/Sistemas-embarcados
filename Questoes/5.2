@@ -1,0 +1,375 @@
+1-
+#include <stdio.h>
+#include <unistd.h> 
+#include <fcntl.h> 
+#include <termios.h>
+
+int main(int argc, const char * argv[]) {
+
+	char nome_arquivo[] = "Ola_mundo.txt", string_[] = "Ola mundo!" ;
+	int descritor, n_bytes;
+    
+	descritor = open(nome_arquivo, O_WRONLY | O_CREAT);
+	n_bytes = write(descritor,  string_, sizeof(string_) );		
+	close(descritor);
+	return 0;
+}
+
+2-
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h> 
+#include <fcntl.h> 
+#include <termios.h>
+#include <string.h>
+
+
+int main(int argc, const char * argv[]) {
+
+	char nome[20], escrever[100] = "Nome: ", idade[3];
+	int descritor, n_bytes;
+	printf("Nome: ");
+	scanf("%s", nome);
+	printf("Idade: ");
+	scanf("%s", idade);
+	strcat(escrever,nome);
+	strcat(escrever,".\nIdade: ");
+	strcat(escrever,idade);
+	strcat(escrever," anos.");
+	strcat(nome,".txt");
+	descritor = open(nome, O_WRONLY | O_CREAT);
+	n_bytes = write(descritor,  escrever, sizeof(escrever) );		
+	close(descritor);
+	return 0;
+}
+
+3-
+Nome: Julia.
+Idade: 22 anos.
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h> 
+#include <fcntl.h> 
+#include <termios.h>
+#include <string.h>
+
+
+int main(int argc, const char * argv[]) {
+
+	char nome[20], escrever[100] = "Nome: ";
+	int descritor, n_bytes;
+    strcpy(nome,argv[1]);
+    strcat(escrever, nome);
+    strcat(escrever,".\nIdade: ");
+    strcat(escrever, argv[2]);
+    strcat(escrever," anos.");
+    strcat(nome,".txt");
+	descritor = open(nome, O_WRONLY | O_CREAT);
+	n_bytes = write(descritor,  escrever, sizeof(escrever) );		
+	close(descritor);
+	return 0;
+}
+
+4-
+
+//MAIN
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h> 
+#include <fcntl.h> 
+#include <termios.h>
+#include <string.h>
+#include "bib_arqs.h"
+
+int main(int argc, const char * argv[]) {
+    char nome[] = "arquivo.txt";
+    int tamanho;
+    tamanho = tam_arq_texto(nome);    
+    printf("%d \n", tamanho);
+	return 0;
+}
+
+//bib_arqs.h
+int tam_arq_texto(char *nome_arquivo);
+
+//bib_arqs.c
+#include "bib_arqs.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h> 
+#include <fcntl.h> 
+#include <termios.h>
+#include <string.h>
+
+
+int tam_arq_texto(char *nome_arquivo)
+{
+	int tamanho = -1, descritor, n_byte;
+	char c;
+	descritor = open (nome_arquivo, O_RDWR | O_CREAT);
+    
+    if (descritor == -1) {
+		return -1;
+		close(descritor);
+	}
+    tamanho = lseek(descritor, 0, SEEK_END);
+	close(descritor);
+	return (tamanho - 1);
+}
+
+5-
+//MAIN
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h> 
+#include <fcntl.h> 
+#include <termios.h>
+#include <string.h>
+#include "bib_arqs.h"
+
+int main(int argc, const char * argv[]) {
+    char nome[] = "arquivo.txt", conteudo[100];
+    int tamanho;
+    tamanho = tam_arq_texto(nome);    
+    le_arq_texto(nome, conteudo);
+    printf("%s \n", conteudo);
+	return 0;
+}
+
+//bib_arqs.c
+#include "bib_arqs.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h> 
+#include <fcntl.h> 
+#include <termios.h>
+#include <string.h>
+
+
+int tam_arq_texto(char *nome_arquivo)
+{
+	int tamanho = -1, descritor, n_byte;
+	char c;
+	descritor = open (nome_arquivo, O_RDWR | O_CREAT);
+    
+    if (descritor < 0)
+   {
+      perror (nome_arquivo);
+      return -1;
+   }
+    tamanho = lseek(descritor, 0, SEEK_END);
+	close(descritor);
+	return (tamanho - 1);
+}
+
+void le_arq_texto(char *nome_arquivo, char *conteudo)
+{
+    
+	int tamanho = 0, n_byte, descritor;
+	char c;
+    
+	tamanho = tam_arq_texto(nome_arquivo);
+    
+    descritor = open (nome_arquivo, O_RDWR | O_CREAT);
+     
+        if (descritor < 0){
+            
+            perror (nome_arquivo);
+            return;
+        }
+    
+       /* deve-se passar sempre o endereço de memória da variável que vai receber os bytes lidos */
+   n_byte = read (descritor, conteudo, tamanho*sizeof(char));
+ 
+   if (n_byte < 0)
+   {
+      perror (nome_arquivo);
+      return;
+   }
+	close(descritor);
+}
+
+//bib_arqs.h
+int tam_arq_texto(char *nome_arquivo);
+void le_arq_texto(char *nome_arquivo, char *conteudo);
+
+6-
+//MAIN
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h> 
+#include <fcntl.h> 
+#include <termios.h>
+#include <string.h>
+#include "bib_arqs.h"
+
+int main(int argc, const char * argv[]) {
+    char nome[] = "arquivo.txt", conteudo[100];
+    strcpy(nome,argv[1]);
+    int tamanho;
+    tamanho = tam_arq_texto(nome);    
+    le_arq_texto(nome, conteudo);
+    printf("%s \n", conteudo);
+	return 0;
+}
+
+//bib_arqs.c
+#include "bib_arqs.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h> 
+#include <fcntl.h> 
+#include <termios.h>
+#include <string.h>
+
+
+int tam_arq_texto(char *nome_arquivo)
+{
+	int tamanho = -1, descritor, n_byte;
+	char c;
+	descritor = open (nome_arquivo, O_RDWR | O_CREAT);
+    
+    if (descritor < 0)
+   {
+      perror (nome_arquivo);
+      return -1;
+   }
+    tamanho = lseek(descritor, 0, SEEK_END);
+	close(descritor);
+	return (tamanho - 1);
+}
+
+void le_arq_texto(char *nome_arquivo, char *conteudo)
+{
+    
+	int tamanho = 0, n_byte, descritor;
+	char c;
+    
+	tamanho = tam_arq_texto(nome_arquivo);
+    
+    descritor = open (nome_arquivo, O_RDWR | O_CREAT);
+     
+        if (descritor < 0){
+            
+            perror (nome_arquivo);
+            return;
+        }
+    
+       /* deve-se passar sempre o endereço de memória da variável que vai receber os bytes lidos */
+   n_byte = read (descritor, conteudo, tamanho*sizeof(char));
+ 
+   if (n_byte < 0)
+   {
+      perror (nome_arquivo);
+      return;
+   }
+	close(descritor);
+}
+
+//bib_arqs.h
+int tam_arq_texto(char *nome_arquivo);
+void le_arq_texto(char *nome_arquivo, char *conteudo);
+
+7-
+//MAIN
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h> 
+#include <fcntl.h> 
+#include <termios.h>
+#include <string.h>
+#include "bib_arqs.h"
+
+int main(int argc, const char * argv[]) {
+    char nome[20], conteudo[500], palavra_chave[20];
+    strcpy(nome,argv[2]);
+    strcpy(palavra_chave,argv[1]);
+    int tamanho_texto, tamanho_palavra, n, i, igual = 0, diferente = 0;;
+    
+    tamanho_texto = tam_arq_texto(nome); 
+    le_arq_texto(nome, conteudo);
+    tamanho_palavra = strlen(palavra_chave);
+    
+    for(n = 0; n <= tamanho_texto; n++)
+    {       
+            if((conteudo[n] == ' ') || (conteudo[n] == 'EOF') || (n == tamanho_texto) 
+	    || (conteudo[n] == '.') || (conteudo[n] == ','))
+            {
+                for(i = 0; i < tamanho_palavra; i++)
+                {
+                    if(conteudo[n - tamanho_palavra + i] != palavra_chave[i])
+                    {
+                        diferente = 1;
+                        break;
+                    }
+                }
+                if (diferente != 1 )
+                {
+                    igual++;
+                }   
+            }        
+            diferente = 0;
+    }       
+    printf("Iguais: %d \n", igual);
+    return 0;
+}
+
+//bib_arqs.c
+#include "bib_arqs.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h> 
+#include <fcntl.h> 
+#include <termios.h>
+#include <string.h>
+
+
+int tam_arq_texto(char *nome_arquivo)
+{
+	int tamanho = -1, descritor, n_byte;
+	char c;
+	descritor = open (nome_arquivo, O_RDWR | O_CREAT);
+    
+    if (descritor < 0)
+   {
+      perror (nome_arquivo);
+      return -1;
+   }
+    tamanho = lseek(descritor, 0, SEEK_END);
+	close(descritor);
+	return (tamanho - 1);
+}
+
+void le_arq_texto(char *nome_arquivo, char *conteudo)
+{
+    
+	int tamanho = 0, n_byte, descritor;
+	char c;
+    
+	tamanho = tam_arq_texto(nome_arquivo);
+    
+    descritor = open (nome_arquivo, O_RDWR | O_CREAT);
+     
+        if (descritor < 0){
+            
+            perror (nome_arquivo);
+            return;
+        }
+    
+       /* deve-se passar sempre o endereço de memória da variável que vai receber os bytes lidos */
+   n_byte = read (descritor, conteudo, tamanho*sizeof(char));
+ 
+   if (n_byte < 0)
+   {
+      perror (nome_arquivo);
+      return;
+   }
+	close(descritor);
+}
+
+//bib_arqs.h
+int tam_arq_texto(char *nome_arquivo);
+void le_arq_texto(char *nome_arquivo, char *conteudo);
+
