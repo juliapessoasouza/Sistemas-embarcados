@@ -1,0 +1,226 @@
+1- 
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char **argv)
+{
+	 printf("Olá mundo!");
+	return 0;
+}
+
+2-
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char **argv)
+{
+
+	char nome[128];
+	printf("Qual é o seu nome? ");
+	scanf("%s", nome);
+	printf("Olá %s. \n", nome);
+	return 0;
+}
+
+3- 
+a) 
+Qual é o seu nome? Julia Pessoa
+Olá Julia.
+
+b)
+Qual é o seu nome? "Julia Pessoa"    
+Olá "Julia.
+
+c)
+Qual é o seu nome? Olá Julia.
+
+d)
+Qual é o seu nome? Olá Julia.
+
+e)
+Qual é o seu nome? Olá Julia.
+
+f)
+Qual é o seu nome? Olá Ola. 
+
+4-
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char **argv)
+{
+	printf("Olá, %s. \n", argv[1]);
+	return 0;
+}
+
+5-
+a)
+Olá, Julia.
+
+b)
+Olá, Julia Pessoa.
+
+c)
+Olá, (null).
+
+d)
+Olá, (null)
+
+e)
+Julia Pessoa | ./reciprocal
+
+f)
+Olá, (null).
+
+6-
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char **argv)
+{
+	printf("Olá, %s. \n", argv[1]);
+	printf("Numero de entradas =  %d.", argc);
+	return 0;
+}
+### Saida
+$ ./reciprocal Julia
+Olá, Julia. 
+Numero de entradas =  2.
+
+7-
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char **argv)
+{
+	int n=1;
+
+	printf("Argumentos: ");	
+	for(1; n < argc; n++)
+	{
+	printf("%s ", argv[n]);
+	}
+	return 0;
+}221
+
+8-
+#include <stdio.h>
+#include <stdlib.h>
+#include "num_caracs.h"
+
+int main(int argc, char **argv)
+{
+	int tamanho;
+	char numero[100];
+	gets(numero);
+	tamanho = Num_Caracs(numero);
+	printf("Tamanho: %d ", tamanho);
+	return 0;
+}
+
+//num_caracs.h
+int Num_Caracs(char *string);
+
+//num_caracs.c
+#include "num_caracs.h"
+
+int Num_Caracs(char *string)
+{
+	int tamanho;	
+	tamanho = strlen(string);
+	return tamanho;
+}
+
+$ ./num_caracs
+Julia
+Tamanho: 5
+
+9-
+
+$ ./num_caracs
+Julia Pessoa Souza
+Argumento: Julia / Numero de caracteres: 5.
+Argumento: Pessoa / Numero de caracteres: 6.
+Argumento: Souza / Numero de caracteres: 5.
+
+// MAIN
+#include <stdio.h>
+#include <stdlib.h>
+#include "num_caracs.h"
+
+int main(int argc, char **argv)
+{
+	char numero[100];
+	gets(numero);	
+	Num_Caracs(numero);
+	return 0;
+}
+
+// NUM_CARACS.c
+#include "num_caracs.h"
+
+int Num_Caracs(char *string)
+{
+	int tamanho = 0, tamanho_total, aux = 0, n;
+	char temporaria[50];	
+	tamanho_total = strlen(string);
+	
+	for (n = 0; n <= tamanho_total ; n++)
+	{		
+	
+		temporaria[aux] = string[n];	
+	
+			if((string[n] == ' ') || (string[n] == '\n')|| (n == tamanho_total)) {
+			temporaria[aux] = '\0';
+			tamanho = strlen(temporaria);
+			printf("Argumento: %s / Numero de caracteres: %d.\n", temporaria, tamanho);
+			aux = -1;
+			}
+		aux++;
+	}
+	return 0;
+}
+
+//NUM_CARACS.h
+int Num_Caracs(char *string);
+
+
+10-
+reciprocal: main.o num_caracs.o
+	gcc $(CFLAGS) -o num_caracs main.o num_caracs.o
+main.o: main.c num_caracs.h
+	gcc $(CFLAGS) -c main.c
+reciprocal.o: num_caracs.c num_caracs.h
+	gcc $(CFLAGS) -c num_caracs.c
+clean:
+	rm -f *.o num_caracs
+  
+11-
+$ ./num_caracs Julia Pessoa             Souza
+Tamanho: 27
+//MAIN
+#include <stdio.h>
+#include <stdlib.h>
+#include "num_caracs.h"
+
+int main(int argc, char **argv)
+{
+	int n, tamanho_arg, tamanho_arg_2;
+	for(n=0; n<argc; n++){
+	tamanho_arg = tamanho_arg + Num_Caracs(argv[n]);
+	}
+	printf("Tamanho: %d ", tamanho_arg );
+	return 0;
+}
+
+12-
+reciprocal: main.o num_caracs.o
+	gcc $(CFLAGS) -o num_caracs main.o num_caracs.o
+main.o: main.c num_caracs.h
+	gcc $(CFLAGS) -c main.c
+reciprocal.o: num_caracs.c num_caracs.h
+	gcc $(CFLAGS) -c num_caracs.c
+clean:
+	rm -f *.o num_caracs
