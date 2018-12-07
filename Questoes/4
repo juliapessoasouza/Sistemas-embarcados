@@ -1,0 +1,209 @@
+1-
+#include <stdio.h>
+#include <stdlib.h> /* Para a função exit() */
+int main(int argc, const char * argv[]) {
+
+FILE *fp;
+fp=fopen ("ola_mundo.txt","w");
+char c[100] = "ola_mundo!"; 
+fputs(c, fp);
+return 0;
+}
+
+2-
+$ cat Nome.txt
+Digite o seu nome: Julia Pessoa 
+Digite a sua idade: 22
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "reciprocal.h"
+
+int main(int argc, const char * argv[]) {
+	char nome[100];
+	int idade;
+	FILE *pf;
+	pf = fopen ("Nome.txt","w");
+	printf("Digite o seu nome: ");
+	gets(nome);
+	printf("Digite a sua idade: ");
+	scanf("%d", &idade);
+	fprintf(pf, "Digite o seu nome: %s \n", nome);
+	fprintf(pf, "Digite a sua idade: %d \n", idade);
+	fclose(pf);
+	return 0;
+}
+
+3-
+$ ./reciprocal Julia 22
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "reciprocal.h"
+
+int main(int argc, const char * argv[]) {
+
+	char nome[100];
+	int idade;
+
+
+	FILE *pf;
+	pf = fopen ("Nome.txt","w");
+	fprintf(pf, "Digite o seu nome: %s \n", argv[1]);
+	fprintf(pf, "Digite a sua idade: %s \n", argv[2]);
+
+	fclose(pf);
+	return 0;
+}
+
+4-
+//TEXTO_ARQUIVO
+Julia Pessoa
+
+//Terminal
+$ ./bib_arqs 
+Tamanho: 12
+//MAIN
+#include <stdio.h>
+#include <stdlib.h>
+#include "bib_arqs.h"
+
+int main(int argc, const char * argv[]) {
+
+	int tamanho = -1;
+	char nome_arquivo[] = "Nome.txt";
+	tamanho = tam_arq_texto(nome_arquivo);	
+	printf("Tamanho: %d \n", tamanho);
+	return 0;
+}
+
+//bib_arqs.h
+int tam_arq_texto(char *nome_arquivo);
+
+//bib_arqs.c
+#include <stdio.h>
+#include <stdlib.h>
+
+int tam_arq_texto(char *nome_arquivo)
+{
+
+	int tamanho = -1;
+	char c;
+	FILE *fp;
+	fp = fopen (nome_arquivo,"r");
+	while((c = getc(fp) ) != EOF) tamanho++;
+	fclose(fp);
+	return tamanho;
+}
+
+5-
+//TEXTO_ARQUIVO
+Julia Pessoa
+
+//Terminal
+$ ./bib_arqs 
+Conteudo: Julia Pessoa
+
+
+//MAIN
+#include <stdio.h>
+#include <stdlib.h>
+#include "bib_arqs.h"
+
+int main(int argc, const char * argv[]) {
+
+	char nome_arquivo[] = "Nome.txt", conteudo[100];
+	le_arq_texto(nome_arquivo, conteudo);
+	tam_arq_texto(nome_arquivo);	
+	printf("Conteudo: %s \n", conteudo);
+	return 0;
+}
+
+//bib_arqs.h
+int tam_arq_texto(char *nome_arquivo);
+void le_arq_texto(char *nome_arquivo, char *conteudo);
+
+//bib_arqs.c
+#include "bib_arqs.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+int tam_arq_texto(char *nome_arquivo)
+{
+
+	int tamanho = -1;
+	char c;
+	FILE *fp;
+	fp = fopen (nome_arquivo,"r");
+	while((c = getc(fp) ) != EOF) tamanho++;
+	fclose(fp);
+	return tamanho;
+}
+
+void le_arq_texto(char *nome_arquivo, char *conteudo)
+{
+	int tamanho = 0;
+	char c;
+	FILE *fp;
+	fp = fopen (nome_arquivo,"r");
+	while((c = getc(fp) ) != EOF){
+	conteudo[tamanho] = c;	
+	tamanho++;
+		
+	}	
+	fclose(fp);
+}
+
+6-
+#include <stdio.h>
+#include <stdlib.h>
+#include "bib_arqs.h"
+
+int main(int argc, const char * argv[]) {
+
+	char nome_arquivo[] = "Nome.txt", conteudo[100];
+	le_arq_texto(nome_arquivo, conteudo);
+	tam_arq_texto(nome_arquivo);	
+	printf("Conteudo: %s \n", conteudo);
+	return 0;
+}
+
+7-
+
+#include <stdio.h>
+#include "bib_arqs.h"
+
+int main(int argc, char **argv){
+	char *palavra_chave = argv[1];
+	char *nome_arquivo = argv[2];
+	char texto_arquivo[100];
+	int i, j, N=0;
+	int contador = 0;
+	
+	while (palavra_chave[N]!='\0'){
+		N++;
+	}
+
+	printf("N = %d de |%s| e |%s|\n", N,argv[1],palavra_chave);
+	le_arq_texto( nome_arquivo, texto_arquivo);
+	for(i = 0; i<100;i++){
+	printf("%d : Entrou no 1o for: %c\n",i,texto_arquivo[i]); 
+		for( j = 0; j < N; ){
+			printf("%d : Entrou no 2o for: %c e %c ",j, texto_arquivo[i+j], palavra_chave[j]); 
+			if(texto_arquivo[i+j] == palavra_chave[j]){
+				j++;
+				if(j == (N-1))
+					contador++;
+				printf("- Letra igual\n");
+			}else{
+				i = i + j; // Para não ficar repitindo
+				printf("- Letra diferente\n");
+				break;
+			}
+		}
+	}
+	printf("'%s' ocorre %d vezes no arquivo '%s'\n",palavra_chave, contador, nome_arquivo);
+	return 1;
+}
