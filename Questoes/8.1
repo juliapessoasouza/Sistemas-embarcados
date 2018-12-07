@@ -1,0 +1,32 @@
+1-
+a)
+A execução de tarefas é feita de forma individual e exclusiva
+
+Cada filho tem seu espaço dememória protegido
+
+Os filhos criados rodam como processos específicos
+
+A comunicação é feita por pipes, sinais, etc
+
+b)
+Uma só aplicação pode rodar várias threads
+
+Todas as threads compartilham o mesmo espaço de memória
+
+A comunicação é mais simples por usar memória compartilhada
+
+Risco de corrupção de dados
+
+2-
+a)
+Serão criadas 2 Threads e coexistirão 2;
+
+b)
+Serão criadas 2 Threads e coexistirão 1 a cada vez, a segunda só é criada com o fim da pŕimeira;
+
+3-
+a)
+O estado de cancelamento pode ser ativado(padrão) ou desativado. Caso esteja desativado, o cancelamento fica na fila até que o cancelamento estava em ativado. Caso estaja ativado, então o tipo de cancelamento determina quando o cancelamento vai ocorrer
+
+b)
+O tipo de cancelamento pode ser tanto assincrono quanto adiado(padrão). Quando está em assíncrono, o cancelamento pode ocorrer a qualquer momento. Quando está em adiado, o cancelamento sofrerá um atraso até a thread em seguida chame uma função que seja o ponto de cancelamento.
