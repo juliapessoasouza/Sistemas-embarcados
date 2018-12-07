@@ -1,0 +1,44 @@
+1-
+a)
+ps -aux
+
+b)
+ps -u username
+
+c)
+ps aux --sort=-pcpu
+
+d)
+ps -ef --sort=start_time
+
+2-
+Fork vem de bifurcação, onde de um ponto/segmento derivam-se vários. No caso dos processos, um processo se divide em vários.
+
+3-
+a)
+A função system() permite executar um comando dentro do programa, criando um sub-processo (processo-filho). Sua saída é retornada no shell. Sua vantagem é a execução simples. As desvantagens são que esta executa comandos para uma plataforma específica e abre brecha para falhas.
+
+b)
+Com essas funções você pode executar o argumento do execparalelamente com a função principal(a função pai). É mais completo de se utilizar.
+
+4-
+É possível, mas tudo que estiver abaixo do função exec() não será executado, pois depois de realizar o comando, a execução do processo termina.
+
+5-
+a)
+Executa o programa que está localizado no mesmo local que o programa anterior.
+
+b)
+Os argumentos do programa estão em um vetor fixo terminado em NULL.
+
+c)
+Permite que quem chamou o programa especifique o ambiente em que o programa será executado por meio da variável envp.
+
+d)
+Os argumentos do programa estão em um vetor fixo terminado em NULL e o programa está localizado no mesmo local que o programa anterior.
+
+e)
+Os argumentos do programa estão em um vetor fixo terminado em NULL e permite que o programa anterior especifique o ambiente em que o programa será executado por meio da variável envp.
+
+f)
+Os argumentos do programa são vários args e que a ultima deve ser NULL, e permite que o programa anterior especifique o ambiente em que o programa será executado por meio da variável envp.
