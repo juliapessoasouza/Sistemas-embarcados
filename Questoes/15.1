@@ -1,0 +1,8 @@
+1-
+Vantagens: não necessita de dois fios para o envio de dados, a comunicação é sincrona desvantagem: é mais lenta que a comunicação SPI pois não envia e recebe dados ao mesmo tempo. não consegue enviar mensagem iguais ao mesmo tempo para vários dispositivos.
+
+2-
+O MSP430 deve aguardar para escrever na linha de dados(SDA) pois que inicia a cominucação é o mestre, com um bit em nivel lógico baixo, em seguida o mestre envia o endereço do escravo e apos a confirmação pelo escravo ele pode escrever na linha de comunicação.
+
+3-
+Para conversar com o segundo dispositivo ela tem que iniciar a comunicação com o endereco do segundo escravo e após confirmação do escravo mandar a mesma mesma mensagem enviada anteriormente.
